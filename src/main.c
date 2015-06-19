@@ -53,6 +53,16 @@ int32_t second_angle_anim = 0;
 unsigned int minute_angle_anim = 0;
 unsigned int hour_angle_anim = 0;
 
+int qudrantFromHours(int h)
+{
+  return (h%12)/3;
+}
+
+int quandrantFromMinutes(int m)
+{
+  return m/15;
+}
+
 void handle_timer(void* vdata) {
 
 	int *data = (int *) vdata;

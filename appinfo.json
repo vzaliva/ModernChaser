@@ -11,8 +11,18 @@
     "resources": {
         "media": [
             {
-                "file": "images/modern_background_new.png",
-                "name": "IMAGE_BACKGROUND",
+                "file": "images/bluetooth.png",
+                "name": "BLUETOOTH",
+                "type": "png"
+            },
+            {
+                "file": "images/battery-charge.png",
+                "name": "BATTERY_CHARGE",
+                "type": "png"
+            },
+            {
+                "file": "images/battery_icon.png",
+                "name": "BATTERY_ICON",
                 "type": "png"
             },
             {
@@ -22,18 +32,8 @@
                 "type": "png"
             },
             {
-                "file": "images/battery_icon.png",
-                "name": "BATTERY_ICON",
-                "type": "png"
-            },
-            {
-                "file": "images/battery-charge.png",
-                "name": "BATTERY_CHARGE",
-                "type": "png"
-            },
-            {
-                "file": "images/bluetooth.png",
-                "name": "BLUETOOTH",
+                "file": "images/modern_background_new.png",
+                "name": "IMAGE_BACKGROUND",
                 "type": "png"
             }
         ]
