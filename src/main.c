@@ -81,9 +81,11 @@ void handle_timer(void* vdata) {
 			timer_handle = app_timer_register(50 /* milliseconds */,
 					&handle_timer, &my_cookie);
 		} else if (init_anim == ANIM_SECONDS) {
+#ifdef SHOW_SECONDS
 			layer_mark_dirty(second_display_layer);
 			timer_handle = app_timer_register(50 /* milliseconds */,
 					&handle_timer, &my_cookie);
+#endif
 		}
 	}
 
@@ -319,11 +321,12 @@ void init() {
 			&center_display_layer_update_callback);
 	layer_add_child(window_layer, center_display_layer);
 
+#ifdef SHOW_SECONDS
 	second_display_layer = layer_create(GRECT_FULL_WINDOW);
 	layer_set_update_proc(second_display_layer,
 			&second_display_layer_update_callback);
 	layer_add_child(window_layer, second_display_layer);
-
+#endif
 	// Configurable inverse
 #ifdef INVERSE
 	full_inverse_layer = inverter_layer_create(GRECT_FULL_WINDOW);

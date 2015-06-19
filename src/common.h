@@ -3,7 +3,8 @@
 
 #include "pebble.h"
 
-#define INVERSE
+#undef INVERSE
+#undef SHOW_SECONDS
 
 #define GRECT_FULL_WINDOW GRect(0,0,144,168)
 
