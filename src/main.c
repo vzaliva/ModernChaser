@@ -86,9 +86,12 @@ int quandrantFromMinutes(int m) {  return m/15; }
 
 GRect quadrant_fit(int q, int16_t w, int16_t h)
 {
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit <-: q=%d w=%d h=%d", q,w,h);
     GRect *qr = q_rects+q;
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit (q): (%d %d) (%d %d)", qr->origin.x, qr->origin.y, qr->size.w, qr->size.h);
     int16_t dw = (qr->size.w - w)/2;
     int16_t dh = (qr->size.h - h)/2;
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit ->: (%d %d) (%d %d)", dw, dh, w, h);
     return GRect(dw, dh, w, h);
 }
 
@@ -321,7 +324,7 @@ void init() {
 	layer_add_child(window_layer, background_layer);
 
 
-    struct qpair free_q = find_free_quandrants();
+  struct qpair free_q = find_free_quandrants();
 
 	// Date setup
 	date_layer = text_layer_create(quadrant_fit(free_q.a, DATE_WIDTH, DATE_HEIGHT));
@@ -338,7 +341,7 @@ void init() {
 	icon_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_BATTERY_CHARGE);
 	icon_bt = gbitmap_create_with_resource(RESOURCE_ID_BLUETOOTH);
 
-    bt_battery_layer = layer_create(quadrant_fit(free_q.b, BT_BAT_WIDTH, BT_BAT_HEIGHT));
+  bt_battery_layer = layer_create(quadrant_fit(free_q.b, BT_BAT_WIDTH, BT_BAT_HEIGHT));
     
 	BatteryChargeState initial = battery_state_service_peek();
 	battery_level = initial.charge_percent;
