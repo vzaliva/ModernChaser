@@ -18,7 +18,11 @@ static GBitmap *icon_battery;
 static GBitmap *icon_battery_charge;
 static GBitmap *icon_bt;
 
+#define BT_BAT_WIDTH 24
+#define BT_BAT_HEIGHT 28
+
 static Layer *bt_battery_layer;
+
 static Layer *battery_layer;
 static Layer *bt_layer;
 
@@ -72,14 +76,15 @@ int32_t second_angle_anim = 0;
 unsigned int minute_angle_anim = 0;
 unsigned int hour_angle_anim = 0;
 
-int qudrantFromHours(int h)
-{
-  return (h%12)/3;
-}
+int qudrantFromHours(int h) { return (h%12)/3; }
+int quandrantFromMinutes(int m) {  return m/15; }
 
-int quandrantFromMinutes(int m)
+GRect quadrant_fit(int q, int16_t w, int16_t h)
 {
-  return m/15;
+    GRect *qr = q_rects+q;
+    int16_t dw = (qr->size.w - w)/2;
+    int16_t dh = (qr->size.h - h)/2;
+    return GRect(dw, dh, w, h);
 }
 
 void handle_timer(void* vdata) {
@@ -305,9 +310,8 @@ void init() {
 	icon_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_BATTERY_CHARGE);
 	icon_bt = gbitmap_create_with_resource(RESOURCE_ID_BLUETOOTH);
 
-
     //TODO: better initial position
-    bt_battery_layer = layer_create(GRect(50,56,24,28));
+    bt_battery_layer = layer_create(quadrant_fit(3, BT_BAT_WIDTH, BT_BAT_HEIGHT));
     
 	BatteryChargeState initial = battery_state_service_peek();
 	battery_level = initial.charge_percent;
