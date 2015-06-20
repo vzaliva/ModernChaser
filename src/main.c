@@ -8,8 +8,13 @@ static Layer *minute_display_layer;
 static Layer *hour_display_layer;
 static Layer *center_display_layer;
 static Layer *second_display_layer;
+
+#define DATE_WIDTH 40
+#define DATE_HEIGHT 48
+
 static TextLayer *date_layer;
-static char date_text[] = "Wed 13 ";
+static char date_text[] = "Wed\n13";
+
 static bool bt_ok = false;
 static uint8_t battery_level;
 static bool battery_plugged;
@@ -225,7 +230,7 @@ void draw_date() {
 	time_t now = time(NULL);
 	struct tm *t = localtime(&now);
 
-	strftime(date_text, sizeof(date_text), "%a %d", t);
+	strftime(date_text, sizeof(date_text), "%a\n%d", t);
 
 	text_layer_set_text(date_layer, date_text);
 }
@@ -296,7 +301,8 @@ void init() {
 	layer_add_child(window_layer, background_layer);
 
 	// Date setup
-	date_layer = text_layer_create(GRect(27, 100, 90, 21));
+    //TODO: better initial position
+	date_layer = text_layer_create(quadrant_fit(1, DATE_WIDTH, DATE_HEIGHT));
 	text_layer_set_text_color(date_layer, GColorWhite);
 	text_layer_set_text_alignment(date_layer, GTextAlignmentCenter);
 	text_layer_set_background_color(date_layer, GColorClear);
