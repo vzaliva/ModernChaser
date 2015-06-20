@@ -6,7 +6,9 @@
 #undef INVERSE
 #undef SHOW_SECONDS
 
-#define GRECT_FULL_WINDOW GRect(0,0,144,168)
+#define FULL_W 144
+#define FULL_H 168
+#define GRECT_FULL_WINDOW GRect(0,0,FULL_W,FULL_H)
 
 void conserve_power(bool conserve);
 

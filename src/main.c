@@ -27,6 +27,24 @@ bool g_conserve = false;
 static InverterLayer *full_inverse_layer;
 #endif
 
+// following macros define margins on side of the screen
+// used by digits. In fact they are assymtetric 35 and 28 
+// left and right, and 25 and 26 top and bottom. But we take
+// max of both to make things even.
+#define X_MARGIN 35
+#define Y_MARGIN 26
+
+#define Q_WIDTH ((FULL_W-(2*X_MARGIN))/2)
+#define Q_HEIGHT ((FULL_H-(2*Y_MARGIN))/2)
+
+// Bounding boxes for quadrant rectangles
+static struct GRect[4] q_rects = {
+  GRect(FULL_W/2, Y_MARGIN, Q_WIDH, Q_HEIGHT),
+  GRect(FULL_W/2, (FULL_H/2)+Y_MARGIN, Q_WIDH, Q_HEIGHT),
+  GRect(X_MARGIN, (FULL_H/2)+Y_MARGIN, Q_WIDH, Q_HEIGHT),
+  GRect(X_MARGIN, Y_MARGIN, Q_WIDH, Q_HEIGHT)
+};
+
 static Layer *background_layer;
 static Layer *window_layer;
 
