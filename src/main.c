@@ -18,6 +18,7 @@ static GBitmap *icon_battery;
 static GBitmap *icon_battery_charge;
 static GBitmap *icon_bt;
 
+static Layer *bt_battery_layer;
 static Layer *battery_layer;
 static Layer *bt_layer;
 
@@ -38,11 +39,11 @@ static InverterLayer *full_inverse_layer;
 #define Q_HEIGHT ((FULL_H-(2*Y_MARGIN))/2)
 
 // Bounding boxes for quadrant rectangles
-static struct GRect[4] q_rects = {
-  GRect(FULL_W/2, Y_MARGIN, Q_WIDH, Q_HEIGHT),
-  GRect(FULL_W/2, (FULL_H/2)+Y_MARGIN, Q_WIDH, Q_HEIGHT),
-  GRect(X_MARGIN, (FULL_H/2)+Y_MARGIN, Q_WIDH, Q_HEIGHT),
-  GRect(X_MARGIN, Y_MARGIN, Q_WIDH, Q_HEIGHT)
+static struct GRect q_rects[4] = {
+    {{FULL_W/2, Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}},
+    {{FULL_W/2, (FULL_H/2)+Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}},
+    {{X_MARGIN, (FULL_H/2)+Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}},
+    {{X_MARGIN, Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}}
 };
 
 static Layer *background_layer;
@@ -304,19 +305,24 @@ void init() {
 	icon_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_BATTERY_CHARGE);
 	icon_bt = gbitmap_create_with_resource(RESOURCE_ID_BLUETOOTH);
 
+
+    //TODO: better initial position
+    bt_battery_layer = layer_create(GRect(50,56,24,28));
+    
 	BatteryChargeState initial = battery_state_service_peek();
 	battery_level = initial.charge_percent;
 	battery_plugged = initial.is_plugged;
-	battery_layer = layer_create(GRect(50,56,24,12)); //24*12
+	battery_layer = layer_create(GRect(0,0,24,12)); //24*12
 	layer_set_update_proc(battery_layer, &battery_layer_update_callback);
-	layer_add_child(window_layer, battery_layer);
-
+	layer_add_child(bt_battery_layer, battery_layer);
 
 	bt_ok = bluetooth_connection_service_peek();
-	bt_layer = layer_create(GRect(83,56,9,12)); //9*12
+	bt_layer = layer_create(GRect(8,16,9,12)); //9*12
 	layer_set_update_proc(bt_layer, &bt_layer_update_callback);
-	layer_add_child(window_layer, bt_layer);
+	layer_add_child(bt_battery_layer, bt_layer);
 
+	layer_add_child(window_layer, bt_battery_layer);
+    
 	// Hands setup
 	hour_display_layer = layer_create(GRECT_FULL_WINDOW);
 	layer_set_update_proc(hour_display_layer,
@@ -367,6 +373,7 @@ void deinit() {
 	layer_destroy(second_display_layer);
 	layer_destroy(battery_layer);
 	layer_destroy(bt_layer);
+	layer_destroy(bt_battery_layer);
 
 #ifdef INVERSE
 	inverter_layer_destroy(full_inverse_layer);
