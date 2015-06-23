@@ -3,7 +3,6 @@
 
 #include "pebble.h"
 
-#undef INVERSE
 #undef SHOW_SECONDS
 
 #define FULL_W 144

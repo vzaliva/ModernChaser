@@ -33,10 +33,6 @@ static Layer *bt_layer;
 
 bool g_conserve = false;
 
-#ifdef INVERSE
-static InverterLayer *full_inverse_layer;
-#endif
-
 // following macros define margins on side of the screen
 // used by digits. In fact they are assymtetric 35 and 28 
 // left and right, and 25 and 26 top and bottom. But we take
@@ -86,12 +82,12 @@ int quandrantFromMinutes(int m) {  return m/15; }
 
 GRect quadrant_fit(int q, int16_t w, int16_t h)
 {
-    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit <-: q=%d w=%d h=%d", q,w,h);
+    //APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit <-: q=%d w=%d h=%d", q,w,h);
     GRect *qr = q_rects+q;
-    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit (q): (%d %d) (%d %d)", qr->origin.x, qr->origin.y, qr->size.w, qr->size.h);
+    //APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit (q): (%d %d) (%d %d)", qr->origin.x, qr->origin.y, qr->size.w, qr->size.h);
     int16_t fx = qr->origin.x + (qr->size.w - w)/2;
     int16_t fy = qr->origin.y + (qr->size.h - h)/2;
-    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit ->: (%d %d) (%d %d)", fx, fy, w, h);
+    //APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit ->: (%d %d) (%d %d)", fx, fy, w, h);
     return GRect(fx, fy, w, h);
 }
 
@@ -106,12 +102,14 @@ struct qpair find_free_quandrants()
 	time_t now = time(NULL);
 	struct tm *t = localtime(&now);
     // find out which quadrants are taken:
-    int qh = qudrantFromHours(t->tm_hour);
-    int qm = quandrantFromMinutes(t->tm_min);
+  int qh = qudrantFromHours(t->tm_hour);
+  int qm = quandrantFromMinutes(t->tm_min);
 
-    //TODO: Implement
-    struct qpair res = {3,2};
-    return res;
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"used quadrants: h=%d m=%d", qh, qm);
+
+  //TODO: Implement
+  struct qpair res = {0,1};
+  return res;
 }
 
 
@@ -385,12 +383,6 @@ void init() {
 			&second_display_layer_update_callback);
 	layer_add_child(window_layer, second_display_layer);
 #endif
-	// Configurable inverse
-#ifdef INVERSE
-	full_inverse_layer = inverter_layer_create(GRECT_FULL_WINDOW);
-	layer_add_child(window_layer, inverter_layer_get_layer(full_inverse_layer));
-#endif
-
 }
 
 void deinit() {
@@ -408,11 +400,6 @@ void deinit() {
 	layer_destroy(battery_layer);
 	layer_destroy(bt_layer);
 	layer_destroy(bt_battery_layer);
-
-#ifdef INVERSE
-	inverter_layer_destroy(full_inverse_layer);
-#endif
-
 	layer_destroy(background_layer);
 	layer_destroy(window_layer);
 
