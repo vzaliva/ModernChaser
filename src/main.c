@@ -9,7 +9,7 @@ static Layer *hour_display_layer;
 static Layer *center_display_layer;
 static Layer *second_display_layer;
 
-#define DATE_WIDTH 36
+#define DATE_WIDTH 32
 #define DATE_HEIGHT 48
 
 static TextLayer *date_layer;
@@ -93,8 +93,30 @@ GRect quadrant_fit(int q, int16_t w, int16_t h)
 
 struct qpair
 {
-    int date;
     int bat;
+    int date;
+};
+
+// There are certain aesthetical considerations in chosing quadrants,
+// which are difficult to formalize as an alogorith. We hardcoded
+// laoyout preferences instead.
+static struct qpair preferred_quadrants[16] = {
+  {-1,-1},
+  {3,2},
+  {3,2},
+  {3,2},
+  {0,1},
+  {3,1},
+  {3,0},
+  {-1,-1},
+  {0,1},
+  {2,1},
+  {0,2},
+  {-1,-1},
+  {0,1},
+  {-1,-1},
+  {-1,-1},
+  {-1,-1}
 };
 
 struct qpair find_free_quandrants()
@@ -105,11 +127,11 @@ struct qpair find_free_quandrants()
   int qh = qudrantFromHours(t->tm_hour);
   int qm = quandrantFromMinutes(t->tm_min);
 
-  APP_LOG(APP_LOG_LEVEL_DEBUG,"used quadrants: h=%d m=%d", qh, qm);
+  int i = (1<<qh) & (1<<qm);
+  //APP_LOG(APP_LOG_LEVEL_DEBUG,"used quadrants: h=%d m=%d index=%d", qh, qm, i);
+  //APP_LOG(APP_LOG_LEVEL_DEBUG,"prefered quadrants: %d,%d", preferred_quadrants[i].bat, preferred_quadrants[i].date);
 
-  //TODO: Implement
-  struct qpair res = {0,1};
-  return res;
+  return preferred_quadrants[i];
 }
 
 
