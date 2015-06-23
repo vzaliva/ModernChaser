@@ -9,7 +9,7 @@ static Layer *hour_display_layer;
 static Layer *center_display_layer;
 static Layer *second_display_layer;
 
-#define DATE_WIDTH 40
+#define DATE_WIDTH 36
 #define DATE_HEIGHT 48
 
 static TextLayer *date_layer;
@@ -44,15 +44,15 @@ static InverterLayer *full_inverse_layer;
 #define X_MARGIN 35
 #define Y_MARGIN 26
 
-#define Q_WIDTH ((FULL_W-(2*X_MARGIN))/2)
+#define Q_WIDTH  ((FULL_W-(2*X_MARGIN))/2)
 #define Q_HEIGHT ((FULL_H-(2*Y_MARGIN))/2)
 
 // Bounding boxes for quadrant rectangles
 static struct GRect q_rects[4] = {
-    {{FULL_W/2, Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}},
-    {{FULL_W/2, (FULL_H/2)+Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}},
-    {{X_MARGIN, (FULL_H/2)+Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}},
-    {{X_MARGIN, Y_MARGIN}, {Q_WIDTH, Q_HEIGHT}}
+    {{FULL_W/2, Y_MARGIN} , {Q_WIDTH, Q_HEIGHT}},
+    {{FULL_W/2, FULL_H/2} , {Q_WIDTH, Q_HEIGHT}},
+    {{X_MARGIN, FULL_H/2} , {Q_WIDTH, Q_HEIGHT}},
+    {{X_MARGIN, Y_MARGIN} , {Q_WIDTH, Q_HEIGHT}}
 };
 
 static Layer *background_layer;
@@ -89,10 +89,10 @@ GRect quadrant_fit(int q, int16_t w, int16_t h)
     APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit <-: q=%d w=%d h=%d", q,w,h);
     GRect *qr = q_rects+q;
     APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit (q): (%d %d) (%d %d)", qr->origin.x, qr->origin.y, qr->size.w, qr->size.h);
-    int16_t dw = (qr->size.w - w)/2;
-    int16_t dh = (qr->size.h - h)/2;
-    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit ->: (%d %d) (%d %d)", dw, dh, w, h);
-    return GRect(dw, dh, w, h);
+    int16_t fx = qr->origin.x + (qr->size.w - w)/2;
+    int16_t fy = qr->origin.y + (qr->size.h - h)/2;
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit ->: (%d %d) (%d %d)", fx, fy, w, h);
+    return GRect(fx, fy, w, h);
 }
 
 struct qpair
@@ -110,7 +110,7 @@ struct qpair find_free_quandrants()
     int qm = quandrantFromMinutes(t->tm_min);
 
     //TODO: Implement
-    struct qpair res = {3,1};
+    struct qpair res = {3,2};
     return res;
 }
 
