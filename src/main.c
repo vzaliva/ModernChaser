@@ -93,8 +93,8 @@ GRect quadrant_fit(int q, int16_t w, int16_t h)
 
 struct qpair
 {
-    int a;
-    int b;
+    int date;
+    int bat;
 };
 
 struct qpair find_free_quandrants()
@@ -325,7 +325,7 @@ void init() {
   struct qpair free_q = find_free_quandrants();
 
 	// Date setup
-	date_layer = text_layer_create(quadrant_fit(free_q.a, DATE_WIDTH, DATE_HEIGHT));
+	date_layer = text_layer_create(quadrant_fit(free_q.date, DATE_WIDTH, DATE_HEIGHT));
 	text_layer_set_text_color(date_layer, GColorWhite);
 	text_layer_set_text_alignment(date_layer, GTextAlignmentCenter);
 	text_layer_set_background_color(date_layer, GColorClear);
@@ -339,7 +339,7 @@ void init() {
 	icon_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_BATTERY_CHARGE);
 	icon_bt = gbitmap_create_with_resource(RESOURCE_ID_BLUETOOTH);
 
-  bt_battery_layer = layer_create(quadrant_fit(free_q.b, BT_BAT_WIDTH, BT_BAT_HEIGHT));
+  bt_battery_layer = layer_create(quadrant_fit(free_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
     
 	BatteryChargeState initial = battery_state_service_peek();
 	battery_level = initial.charge_percent;
