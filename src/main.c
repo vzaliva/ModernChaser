@@ -82,12 +82,12 @@ int quandrantFromMinutes(int m) {  return m/15; }
 
 GRect quadrant_fit(int q, int16_t w, int16_t h)
 {
-    //APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit <-: q=%d w=%d h=%d", q,w,h);
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit <-: q=%d w=%d h=%d", q,w,h);
     GRect *qr = q_rects+q;
-    //APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit (q): (%d %d) (%d %d)", qr->origin.x, qr->origin.y, qr->size.w, qr->size.h);
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit (q): (%d %d) (%d %d)", qr->origin.x, qr->origin.y, qr->size.w, qr->size.h);
     int16_t fx = qr->origin.x + (qr->size.w - w)/2;
     int16_t fy = qr->origin.y + (qr->size.h - h)/2;
-    //APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit ->: (%d %d) (%d %d)", fx, fy, w, h);
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"qfit ->: (%d %d) (%d %d)", fx, fy, w, h);
     return GRect(fx, fy, w, h);
 }
 
@@ -127,9 +127,9 @@ struct qpair find_free_quandrants()
   int qh = qudrantFromHours(t->tm_hour);
   int qm = quandrantFromMinutes(t->tm_min);
 
-  int i = (1<<qh) & (1<<qm);
-  //APP_LOG(APP_LOG_LEVEL_DEBUG,"used quadrants: h=%d m=%d index=%d", qh, qm, i);
-  //APP_LOG(APP_LOG_LEVEL_DEBUG,"prefered quadrants: %d,%d", preferred_quadrants[i].bat, preferred_quadrants[i].date);
+  int i = (1<<qh) | (1<<qm);
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"used quadrants: h=%d m=%d index=%d", qh, qm, i);
+  APP_LOG(APP_LOG_LEVEL_DEBUG,"prefered quadrants: %d,%d", preferred_quadrants[i].bat, preferred_quadrants[i].date);
 
   return preferred_quadrants[i];
 }
