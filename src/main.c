@@ -73,6 +73,7 @@ static GPath *minute_hand_path;
 static AppTimer *timer_handle;
 #define COOKIE_MY_TIMER 1
 static int my_cookie = COOKIE_MY_TIMER;
+
 #define ANIM_IDLE 0
 #define ANIM_START 1
 #define ANIM_HOURS 2
@@ -80,6 +81,7 @@ static int my_cookie = COOKIE_MY_TIMER;
 #define ANIM_SECONDS 4
 #define ANIM_DONE 5
 int init_anim = ANIM_DONE;
+
 int32_t second_angle_anim = 0;
 unsigned int minute_angle_anim = 0;
 unsigned int hour_angle_anim = 0;
@@ -149,7 +151,7 @@ void chase_indicators()
 {
   struct qpair new_q = find_free_quandrants();
   if(new_q.bat != ind_q.bat)
- {
+  {
     ind_q.bat = new_q.bat;
     layer_set_bounds(bt_battery_layer, quadrant_fit(ind_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
   }
@@ -487,6 +489,7 @@ void conserve_power(bool conserve) {
 		layer_set_hidden(second_display_layer, true);
 	} else {
 		tick_timer_service_unsubscribe();
+//TODO: MINUTE_UNIT if SHOW_SECONDS is not defined
 		tick_timer_service_subscribe(SECOND_UNIT, &handle_tick);
 		layer_set_hidden(second_display_layer, false);
 	}
@@ -499,6 +502,7 @@ void conserve_power(bool conserve) {
  */
 int main(void) {
 	init();
+//TODO: MINUTE_UNIT if SHOW_SECONDS is not defined
 	tick_timer_service_subscribe(SECOND_UNIT, &handle_tick);
 	bluetooth_connection_service_subscribe(&bt_connection_handler);
 	battery_state_service_subscribe	(&battery_state_handler);
