@@ -156,7 +156,7 @@ void chase_indicators()
     {
         ind_q.bat = new_q.bat;
         layer_set_bounds(bt_battery_layer, quadrant_fit(ind_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
-        layer_mark_dirty(bt_battery_layer);
+        layer_mark_dirty(ind_layer);
     }
 
     if(new_q.date != ind_q.date)
@@ -164,7 +164,7 @@ void chase_indicators()
         ind_q.date = new_q.date;
         Layer *l = text_layer_get_layer(date_layer);
         layer_set_bounds(l, quadrant_fit(ind_q.date, DATE_WIDTH, DATE_HEIGHT));
-        layer_mark_dirty(l);
+        layer_mark_dirty(ind_layer);
    }
 }
 
