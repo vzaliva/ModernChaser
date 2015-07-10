@@ -119,6 +119,9 @@ static struct qpair preferred_quadrants[16] = {
   {-1,-1}
 };
 
+static struct qpair ind_q;
+
+
 struct qpair find_free_quandrants()
 {
 	time_t now = time(NULL);
@@ -134,6 +137,22 @@ struct qpair find_free_quandrants()
   return preferred_quadrants[i];
 }
 
+
+void chase_indicators()
+{
+  struct qpair new_q = find_free_quandrants();
+  if(new_q.bat != ind_q.bat)
+ {
+    ind_q.bat = new_q.bat;
+    layer_set_bounds(bt_battery_layer, quadrant_fit(ind_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
+  }
+
+  if(new_q.date != ind_q.date)
+  {
+    ind_q.date = new_q.date;
+  	layer_set_bounds(text_layer_get_layer(date_layer), quadrant_fit(ind_q.date, DATE_WIDTH, DATE_HEIGHT));
+  }
+}
 
 void handle_timer(void* vdata) {
 
@@ -343,11 +362,11 @@ void init() {
 	layer_set_update_proc(background_layer, &draw_background_callback);
 	layer_add_child(window_layer, background_layer);
 
-
-  struct qpair free_q = find_free_quandrants();
+  // initial position of date, and bt/battery indicators
+  ind_q = find_free_quandrants();
 
 	// Date setup
-	date_layer = text_layer_create(quadrant_fit(free_q.date, DATE_WIDTH, DATE_HEIGHT));
+	date_layer = text_layer_create(quadrant_fit(ind_q.date, DATE_WIDTH, DATE_HEIGHT));
 	text_layer_set_text_color(date_layer, GColorWhite);
 	text_layer_set_text_alignment(date_layer, GTextAlignmentCenter);
 	text_layer_set_background_color(date_layer, GColorClear);
@@ -361,7 +380,7 @@ void init() {
 	icon_battery_charge = gbitmap_create_with_resource(RESOURCE_ID_BATTERY_CHARGE);
 	icon_bt = gbitmap_create_with_resource(RESOURCE_ID_BLUETOOTH);
 
-  bt_battery_layer = layer_create(quadrant_fit(free_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
+  bt_battery_layer = layer_create(quadrant_fit(ind_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
     
 	BatteryChargeState initial = battery_state_service_peek();
 	battery_level = initial.charge_percent;
