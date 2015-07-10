@@ -3,7 +3,7 @@
 
 #include "pebble.h"
 
-#undef SHOW_SECONDS
+#define SHOW_SECONDS
 
 #define FULL_W 144
 #define FULL_H 168

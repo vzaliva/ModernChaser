@@ -367,13 +367,13 @@ void init() {
 	battery_level = initial.charge_percent;
 	battery_plugged = initial.is_plugged;
 	battery_layer = layer_create(GRect(0,0,24,12)); //24*12
-	layer_set_update_proc(battery_layer, &battery_layer_update_callback);
 	layer_add_child(bt_battery_layer, battery_layer);
+	layer_set_update_proc(battery_layer, &battery_layer_update_callback);
 
 	bt_ok = bluetooth_connection_service_peek();
 	bt_layer = layer_create(GRect(8,16,9,12)); //9*12
-	layer_set_update_proc(bt_layer, &bt_layer_update_callback);
 	layer_add_child(bt_battery_layer, bt_layer);
+	layer_set_update_proc(bt_layer, &bt_layer_update_callback);
 
 	layer_add_child(window_layer, bt_battery_layer);
     
@@ -409,7 +409,7 @@ void init() {
 
 void deinit() {
 
-	window_destroy(window);
+	//window_destroy(window);
 	gbitmap_destroy(background_image_container);
 	gbitmap_destroy(icon_battery);
 	gbitmap_destroy(icon_battery_charge);
