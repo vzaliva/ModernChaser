@@ -408,8 +408,6 @@ void init() {
 }
 
 void deinit() {
-
-	//window_destroy(window);
 	gbitmap_destroy(background_image_container);
 	gbitmap_destroy(icon_battery);
 	gbitmap_destroy(icon_battery_charge);
