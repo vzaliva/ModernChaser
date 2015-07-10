@@ -31,8 +31,8 @@ static GBitmap *icon_bt;
 #define BT_BAT_WIDTH 24
 #define BT_BAT_HEIGHT 28
 
+static Layer *ind_layer;
 static Layer *bt_battery_layer;
-
 static Layer *battery_layer;
 static Layer *bt_layer;
 
@@ -78,8 +78,10 @@ static int my_cookie = COOKIE_MY_TIMER;
 #define ANIM_START 1
 #define ANIM_HOURS 2
 #define ANIM_MINUTES 3
-#define ANIM_SECONDS 4
-#define ANIM_DONE 5
+#define ANIM_IND 4
+#define ANIM_SECONDS 5
+#define ANIM_DONE 6
+
 int init_anim = ANIM_DONE;
 
 int32_t second_angle_anim = 0;
@@ -154,13 +156,16 @@ void chase_indicators()
     {
         ind_q.bat = new_q.bat;
         layer_set_bounds(bt_battery_layer, quadrant_fit(ind_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
+        layer_mark_dirty(bt_battery_layer);
     }
 
     if(new_q.date != ind_q.date)
     {
         ind_q.date = new_q.date;
-        layer_set_bounds(text_layer_get_layer(date_layer), quadrant_fit(ind_q.date, DATE_WIDTH, DATE_HEIGHT));
-    }
+        Layer *l = text_layer_get_layer(date_layer);
+        layer_set_bounds(l, quadrant_fit(ind_q.date, DATE_WIDTH, DATE_HEIGHT));
+        layer_mark_dirty(l);
+   }
 }
 
 void handle_timer(void* vdata) {
@@ -180,6 +185,10 @@ void handle_timer(void* vdata) {
 			layer_mark_dirty(minute_display_layer);
 			timer_handle = app_timer_register(50 /* milliseconds */,
                                               &handle_timer, &my_cookie);
+		} else if (init_anim == ANIM_IND) {
+			layer_mark_dirty(ind_layer);
+			timer_handle = app_timer_register(50 /* milliseconds */,
+                                              &handle_timer, &my_cookie);
 		} else if (init_anim == ANIM_SECONDS) {
 #ifdef SHOW_SECONDS
 			layer_mark_dirty(second_display_layer);
@@ -189,6 +198,15 @@ void handle_timer(void* vdata) {
 		}
 	}
 
+}
+
+void ind_layer_update_callback(Layer *me, GContext* ctx) {
+	(void) me;
+	if (init_anim < ANIM_IND) {
+        chase_indicators();
+    } else if (init_anim == ANIM_IND) {
+        init_anim = ANIM_SECONDS;
+	}
 }
 
 void second_display_layer_update_callback(Layer *me, GContext* ctx) {
@@ -250,7 +268,7 @@ void minute_display_layer_update_callback(Layer *me, GContext* ctx) {
 	} else if (init_anim == ANIM_MINUTES) {
 		minute_angle_anim += 6;
 		if (minute_angle_anim >= angle) {
-			init_anim = ANIM_SECONDS;
+			init_anim = ANIM_IND;
 		} else {
 			angle = minute_angle_anim;
 		}
@@ -371,6 +389,10 @@ void init() {
 	layer_set_update_proc(background_layer, &draw_background_callback);
 	layer_add_child(window_layer, background_layer);
 
+
+    // Indicators layer
+    ind_layer = layer_create(GRECT_FULL_WINDOW);
+
     // initial position of date, and bt/battery indicators
     ind_q = find_free_quandrants();
 
@@ -380,7 +402,7 @@ void init() {
 	text_layer_set_text_alignment(date_layer, GTextAlignmentCenter);
 	text_layer_set_background_color(date_layer, GColorClear);
 	text_layer_set_font(date_layer, fonts_get_system_font(FONT_KEY_GOTHIC_18));
-	layer_add_child(window_layer, text_layer_get_layer(date_layer));
+	layer_add_child(ind_layer, text_layer_get_layer(date_layer));
 
 	draw_date();
 
@@ -403,7 +425,9 @@ void init() {
 	layer_add_child(bt_battery_layer, bt_layer);
 	layer_set_update_proc(bt_layer, &bt_layer_update_callback);
 
-	layer_add_child(window_layer, bt_battery_layer);
+	layer_set_update_proc(ind_layer, &ind_layer_update_callback);
+	layer_add_child(ind_layer, bt_battery_layer);
+	layer_add_child(window_layer, ind_layer);
     
 	// Hands setup
 	hour_display_layer = layer_create(GRECT_FULL_WINDOW);
@@ -448,6 +472,7 @@ void deinit() {
 	layer_destroy(battery_layer);
 	layer_destroy(bt_layer);
 	layer_destroy(bt_battery_layer);
+	layer_destroy(ind_layer);
 	layer_destroy(background_layer);
 	layer_destroy(window_layer);
 
