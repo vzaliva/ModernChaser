@@ -1,5 +1,10 @@
 #include "pebble.h"
-#include "common.h"
+
+#define SHOW_SECONDS
+
+#define FULL_W 144
+#define FULL_H 168
+#define GRECT_FULL_WINDOW GRect(0,0,FULL_W,FULL_H)
 
 static Window* window;
 static GBitmap *background_image_container;
@@ -30,6 +35,8 @@ static Layer *bt_battery_layer;
 
 static Layer *battery_layer;
 static Layer *bt_layer;
+
+void conserve_power(bool conserve);
 
 bool g_conserve = false;
 
