@@ -151,20 +151,25 @@ struct qpair find_free_quandrants()
 
 void chase_indicators()
 {
+    APP_LOG(APP_LOG_LEVEL_DEBUG, "chase_indicators: called");
     struct qpair new_q = find_free_quandrants();
     if(new_q.bat != ind_q.bat)
     {
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "chase_indicators: moving bat from %d to %d",
+                ind_q.bat, new_q.bat);
         ind_q.bat = new_q.bat;
         layer_set_frame(bt_battery_layer, quadrant_fit(ind_q.bat, BT_BAT_WIDTH, BT_BAT_HEIGHT));
-        layer_mark_dirty(ind_layer);
+        //layer_mark_dirty(ind_layer);
     }
 
     if(new_q.date != ind_q.date)
     {
+        APP_LOG(APP_LOG_LEVEL_DEBUG, "chase_indicators: moving date from %d to %d",
+                ind_q.date, new_q.date);
         ind_q.date = new_q.date;
         Layer *l = text_layer_get_layer(date_layer);
         layer_set_frame(l, quadrant_fit(ind_q.date, DATE_WIDTH, DATE_HEIGHT));
-        layer_mark_dirty(ind_layer);
+        //layer_mark_dirty(ind_layer);
     }
 }
 
@@ -173,6 +178,7 @@ void handle_timer(void* vdata) {
 	int *data = (int *) vdata;
 
 	if (*data == my_cookie) {
+        APP_LOG(APP_LOG_LEVEL_DEBUG,"handle_time: %d", init_anim);
 		if (init_anim == ANIM_START) {
 			init_anim = ANIM_HOURS;
 			timer_handle = app_timer_register(50 /* milliseconds */,
@@ -202,9 +208,11 @@ void handle_timer(void* vdata) {
 
 void ind_layer_update_callback(Layer *me, GContext* ctx) {
 	(void) me;
-	if (init_anim < ANIM_IND) {
+
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"ind_layer_update_callback: %d", init_anim);
+
+    if (init_anim == ANIM_IND) {
         chase_indicators();
-    } else if (init_anim == ANIM_IND) {
         init_anim = ANIM_SECONDS;
 	}
 }
@@ -258,6 +266,7 @@ void center_display_layer_update_callback(Layer *me, GContext* ctx) {
 void minute_display_layer_update_callback(Layer *me, GContext* ctx) {
 	(void) me;
 
+    APP_LOG(APP_LOG_LEVEL_DEBUG,"minure_layer_update_callback: %d", init_anim);
 	time_t now = time(NULL);
 	struct tm *t = localtime(&now);
 
@@ -493,6 +502,7 @@ void handle_tick(struct tm *tick_time, TimeUnits units_changed) {
 			if (tick_time->tm_sec == 0) {
 				if (tick_time->tm_min % 2 == 0) {
 					layer_mark_dirty(hour_display_layer);
+					layer_mark_dirty(ind_layer);
 					if (tick_time->tm_min == 0 && tick_time->tm_hour == 0) {
 						draw_date();
 					}
