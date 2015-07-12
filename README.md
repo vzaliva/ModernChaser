@@ -9,9 +9,9 @@ unobscured position.
     <img src="screenshot.png" alt="screenshot" title="Screenshot"</img>
 </div>
 
-This is a demo implementation of my old idea:
+Install on your Pebble from App Store: https://apps.getpebble.com/applications/55a2e7632965f287c3000070
 
-http://notbrainsurgery.livejournal.com/43394.html
+P.S. This is a demo implementation of my old idea: http://notbrainsurgery.livejournal.com/43394.html
 
-Vadim Zaliva <lord@crocodile.org>
+Vadim Zaliva
 
