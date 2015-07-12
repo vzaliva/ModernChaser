@@ -6,7 +6,7 @@ windows are never obscured by watch hands. They move around to
 unobscured position.
 
 <div align="center">
-    <img width="45%" src="screenshot.png" alt="screenshot" title="Screenshot"</img>
+    <img src="screenshot.png" alt="screenshot" title="Screenshot"</img>
 </div>
 
 This is a demo implementation of my old idea:
