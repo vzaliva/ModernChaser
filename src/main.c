@@ -33,10 +33,6 @@ static Layer *bt_battery_layer;
 static Layer *battery_layer;
 static Layer *bt_layer;
 
-void conserve_power(bool conserve);
-
-bool g_conserve = false;
-
 // following macros define margins on side of the screen
 // used by digits. In fact they are assymtetric 35 and 28 
 // left and right, and 25 and 26 top and bottom. But we take
@@ -238,10 +234,6 @@ void battery_state_handler(BatteryChargeState charge)
 	battery_level = charge.charge_percent;
 	battery_plugged = charge.is_plugged;
 	layer_mark_dirty(battery_layer);
-	if (!battery_plugged && battery_level < 20)
-		conserve_power(true);
-	else
-		conserve_power(false);
 }
 
 /*
@@ -375,22 +367,6 @@ void handle_tick(struct tm *tick_time, TimeUnits units_changed)
     }
     layer_mark_dirty(ind_layer);
 }
-
-void conserve_power(bool conserve)
-{
-	if (conserve == g_conserve)
-		return;
-	g_conserve = conserve;
-	if (conserve)
-    {
-		tick_timer_service_unsubscribe();
-		tick_timer_service_subscribe(MINUTE_UNIT, &handle_tick);
-	} else {
-		tick_timer_service_unsubscribe();
-		tick_timer_service_subscribe(MINUTE_UNIT, &handle_tick);
-	}
-}
-
 
 int main(void)
 {
