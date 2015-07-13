@@ -11,11 +11,10 @@ static Layer *minute_display_layer;
 static Layer *hour_display_layer;
 static Layer *center_display_layer;
 
-#define DATE_WIDTH 32
-#define DATE_HEIGHT 48
+#define DATE_WIDTH 25
+#define DATE_HEIGHT 36
 
 static TextLayer *date_layer;
-static char date_text[] = "Wed\n13";
 
 static bool bt_ok = false;
 static uint8_t battery_level;
@@ -205,6 +204,7 @@ void draw_date()
 {
 	time_t now = time(NULL);
 	struct tm *t = localtime(&now);
+    static char date_text[8];
 
 	strftime(date_text, sizeof(date_text), "%a\n%d", t);
 	text_layer_set_text(date_layer, date_text);

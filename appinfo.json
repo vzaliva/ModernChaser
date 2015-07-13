@@ -1,53 +1,52 @@
 {
-  "appKeys": {
-    "dummy": 0
-  },
-  "capabilities": [
-    ""
-  ],
-  "companyName": "Codeminders",
-  "longName": "Modern Chaser",
-  "projectType": "native",
-  "resources": {
-    "media": [
-      {
-        "file": "images/modern_background_new.png",
-        "name": "IMAGE_BACKGROUND",
-        "type": "png"
-      },
-      {
-        "file": "images/modern_logo.png",
-        "menuIcon": true,
-        "name": "IMAGE_MENU_ICON",
-        "type": "png"
-      },
-      {
-        "file": "images/battery_icon.png",
-        "name": "BATTERY_ICON",
-        "type": "png"
-      },
-      {
-        "file": "images/battery-charge.png",
-        "name": "BATTERY_CHARGE",
-        "type": "png"
-      },
-      {
-        "file": "images/bluetooth.png",
-        "name": "BLUETOOTH",
-        "type": "png"
-      }
-    ]
-  },
-  "sdkVersion": "3",
-  "shortName": "Modern Chaser",
-  "uuid": "9CA1DEBB-8116-4F2F-99B5-29DD28799DEF",
-  "versionCode": 1,
-  "versionLabel": "0",
-  "watchapp": {
-    "watchface": true
-  },
-  "targetPlatforms": [
-    "aplite",
-    "basalt"
-  ]
+    "appKeys": {
+        "dummy": 0
+    },
+    "capabilities": [
+        ""
+    ],
+    "companyName": "Codeminders",
+    "longName": "Modern Chaser",
+    "projectType": "native",
+    "resources": {
+        "media": [
+            {
+                "file": "images/bluetooth.png",
+                "name": "BLUETOOTH",
+                "type": "png"
+            },
+            {
+                "file": "images/battery-charge.png",
+                "name": "BATTERY_CHARGE",
+                "type": "png"
+            },
+            {
+                "file": "images/battery_icon.png",
+                "name": "BATTERY_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/modern_logo.png",
+                "menuIcon": true,
+                "name": "IMAGE_MENU_ICON",
+                "type": "png"
+            },
+            {
+                "file": "images/modern_background_new.png",
+                "name": "IMAGE_BACKGROUND",
+                "type": "png"
+            }
+        ]
+    },
+    "sdkVersion": "3",
+    "shortName": "Modern Chaser",
+    "targetPlatforms": [
+        "aplite",
+        "basalt"
+    ],
+    "uuid": "9CA1DEBB-8116-4F2F-99B5-29DD28799DEF",
+    "versionLabel": "1.0",
+    "watchapp": {
+        "watchface": true
+    }
 }
